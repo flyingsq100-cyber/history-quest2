@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>세종·웅진 역사 탐정 - 위치 기반 AI 유물 탐험</title>
+    <meta name="description" content="세종 및 공주 지역의 유적지를 방문하고 AI 카메라로 유물을 인식하여 숨겨진 역사와 야사를 발굴하는 모바일 역사 퀘스트 게임입니다.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- Main Style Sheet -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Google AdSense Mock/Production Script Tag -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-mock" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="app-container">
+        <!-- Header -->
+        <header id="main-header">
+            <div class="header-logo">
+                <svg viewBox="0 0 100 100" class="logo-icon">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="var(--gold-color)" stroke-width="2"/>
+                    <path d="M50 15 L50 85 M15 50 L85 50" stroke="var(--gold-color-dim)" stroke-width="1"/>
+                    <polygon points="50,25 55,45 75,45 60,55 65,75 50,62 35,75 40,55 25,45 45,45" fill="var(--gold-color)"/>
+                </svg>
+                <h1>세종·웅진 역사 탐정</h1>
+            </div>
+            <div id="gps-status-badge" class="badge">
+                <span class="pulse-dot"></span>
+                <span id="current-gps-name">GPS 수신 대기 중</span>
+            </div>
+        </header>
+
+        <!-- Top AdSense Banner Placeholder -->
+        <div class="adsense-banner-container">
+            <ins class="adsbygoogle"
+                 style="display:block; text-align:center;"
+                 data-ad-layout="in-article"
+                 data-ad-format="fluid"
+                 data-ad-client="ca-pub-mock"
+                 data-ad-slot="1234567890"></ins>
+            <div class="ad-label">ADVERTISEMENT</div>
+        </div>
+
+        <!-- Main Content Area -->
+        <main id="main-content">
+            <!-- 1. GPS Controller Panel -->
+            <section id="gps-simulator-section" class="panel-card">
+                <div class="panel-header">
+                    <h2>📍 위치(GPS) 제어 패널</h2>
+                    <p class="panel-subtitle">현장에서는 '실제 GPS'를 켜고, 집에서는 '가상 시뮬레이터'를 사용하세요.</p>
+                </div>
+                <div class="gps-toggle-container" style="margin-bottom: 12px; display: flex; gap: 8px;">
+                    <button id="toggle-real-gps-btn" class="gps-btn" style="flex: 1; padding: 12px; font-weight: 700;">📡 디바이스 실제 GPS 켜기</button>
+                </div>
+                <div class="gps-options-grid">
+                    <button class="gps-btn active" data-loc="none">🛰️ GPS 해제</button>
+                    <button class="gps-btn" data-loc="muryeong">👑 무령왕릉</button>
+                    <button class="gps-btn" data-loc="gongsan">🏰 공산성</button>
+                    <button class="gps-btn" data-loc="museum">🏛️ 공주박물관</button>
+                    <button class="gps-btn" data-loc="seokjangri">🏕️ 석장리 유적</button>
+                    <button class="gps-btn" data-loc="sangdang">⛰️ 상당산성</button>
+                    <button class="gps-btn" data-loc="hongpanseo">🏡 홍판서댁</button>
+                </div>
+                <div id="gps-coordinates-display" style="font-size:0.75rem; color:var(--text-secondary); margin-top:10px; text-align:center;">
+                    위도: -- | 경도: -- (오차 범위: --m)
+                </div>
+            </section>
+
+            <!-- 2. Explorer Active View -->
+            <section id="explorer-view">
+                <!-- Location Info & Quests -->
+                <div id="location-info-card" class="panel-card hidden">
+                    <div class="location-header">
+                        <span class="location-tag">현재 탐험지</span>
+                        <h2 id="location-name">유적지 이름</h2>
+                        <p id="location-desc">유적지에 대한 간략한 설명이 표시됩니다.</p>
+                    </div>
+
+                    <!-- Quest Box -->
+                    <div class="quest-box">
+                        <h3>🔑 활성화된 유물 퀘스트</h3>
+                        <div id="quest-item-container">
+                            <!-- Dynamically Generated -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GPS Offline Notice -->
+                <div id="gps-offline-card" class="panel-card text-center">
+                    <div class="offline-icon-container">
+                        <svg viewBox="0 0 24 24" class="offline-icon">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <h3>역사 탐험을 시작하세요!</h3>
+                    <p>위치 패널에서 실제 GPS를 작동하거나 탐험하고 싶은 가상 유적지를 선택해 주세요.</p>
+                </div>
+            </section>
+
+            <!-- 3. AI Camera Viewfinder (Scanner) -->
+            <section id="camera-section" class="panel-card hidden">
+                <div class="panel-header">
+                    <h2>📷 AI 실시간 카메라 스캐너</h2>
+                    <p class="panel-subtitle">화면 중앙에 유물을 맞추고 셔터를 누르세요.</p>
+                </div>
+
+                <div class="scanner-viewport-wrapper">
+                    <!-- Scanner Box -->
+                    <div class="scanner-viewport">
+                        <div class="scanner-overlay">
+                            <div class="scanner-corners"></div>
+                            <div class="scanner-line"></div>
+                        </div>
+
+                        <!-- Video viewfinder for real camera -->
+                        <div id="scanner-viewfinder" class="viewfinder-content">
+                            <video id="camera-stream" autoplay playsinline class="hidden" style="width:100%; height:100%; object-fit:cover;"></video>
+                            <div id="viewfinder-captured-image" class="hidden" style="width:100%; height:100%; background-size:contain; background-repeat:no-repeat; background-position:center;"></div>
+                            <canvas id="capture-canvas" style="display:none;"></canvas>
+
+                            <div id="viewfinder-placeholder-ui" class="viewfinder-placeholder">
+                                <p>📸 카메라 대기 중</p>
+                                <button id="start-camera-btn" class="gps-btn" style="margin-top:10px; background:var(--gold-gradient); color:#000; font-weight:700;">🎥 카메라 활성화</button>
+                                <button id="upload-file-btn" class="gps-btn" style="margin-top:6px;">📁 앨범에서 사진 선택</button>
+                                <input type="file" id="image-upload" accept="image/*" style="display:none;">
+                            </div>
+                        </div>
+
+                        <!-- Scanning overlay feedback -->
+                        <div id="scan-progress-overlay" class="hidden">
+                            <div class="spinner"></div>
+                            <h4 id="scan-status-text">AI 유물 정밀 분석 중...</h4>
+                            <div class="progress-bar-container">
+                                <div id="scan-progress-bar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Control Buttons for camera -->
+                <div id="camera-active-controls" class="hidden" style="display:flex; justify-content:center; gap:10px; margin-bottom:15px;">
+                    <button id="retake-photo-btn" class="gps-btn">🔄 다시 찍기</button>
+                    <button id="trigger-upload-btn" class="gps-btn">📁 사진 교체</button>
+                </div>
+
+                <!-- Simulation Relic Selector (Allows users to simulate picking a relic if they don't have one physically) -->
+                <div class="simulation-selector-wrapper">
+                    <label>🎯 탐험 타깃 유물 선택 (촬영 검증 대상)</label>
+                    <div id="sim-relic-select-grid" class="relic-grid">
+                        <!-- Dynamically filled -->
+                    </div>
+                </div>
+
+                <!-- Shutter Button -->
+                <div class="shutter-control text-center">
+                    <button id="shutter-btn" class="shutter-btn" disabled>
+                        <div class="shutter-inner"></div>
+                    </button>
+                    <p class="shutter-hint">유물 목표를 선택하고 촬영 버튼을 누르세요</p>
+                </div>
+            </section>
+
+            <!-- 4. Result/Story Modal Overlay -->
+            <div id="story-modal" class="modal-overlay hidden">
+                <div class="modal-content glass-card">
+                    <button id="close-modal-btn" class="close-btn">&times;</button>
+                    <div class="modal-body">
+                        <div class="modal-title-area text-center">
+                            <span class="modal-tag">✨ 유물 발견 성공!</span>
+                            <h2 id="modal-relic-name">유물 이름</h2>
+                        </div>
+
+                        <div class="modal-relic-view text-center" id="modal-relic-svg">
+                            <!-- Dynamic Relic SVG -->
+                        </div>
+
+                        <!-- Story Tabs -->
+                        <div class="story-tabs">
+                            <button class="tab-btn active" data-tab="official">📜 역사 팩트 (정사)</button>
+                            <button class="tab-btn" data-tab="legend">🦊 숨겨진 야사 (전설)</button>
+                        </div>
+
+                        <div class="tab-content-container">
+                            <div id="tab-content-official" class="tab-pane active">
+                                <p>정사 내용 로드 중...</p>
+                            </div>
+                            <div id="tab-content-legend" class="tab-pane">
+                                <p>야사 내용 로드 중...</p>
+                            </div>
+                        </div>
+
+                        <!-- Action buttons inside modal -->
+                        <div class="modal-actions text-center">
+                            <button id="modal-next-quest-btn" class="action-btn gold-gradient">다음 탐험 이어하기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. Stamp Book Section -->
+            <section id="stamp-book-section" class="panel-card">
+                <div class="panel-header">
+                    <h2>📖 세종·웅진 역사 스탬프 북</h2>
+                    <p class="panel-subtitle">각 유적지의 모든 유물을 찾아 도장을 완성해 보세요!</p>
+                </div>
+                <div id="stamp-book-grid" class="stamp-grid">
+                    <!-- Dynamically filled with Stamp Cards -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom AdSense Banner Placeholder -->
+        <div class="adsense-banner-container" style="margin-top: 20px;">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-mock"
+                 data-ad-slot="9876543210"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <div class="ad-label">ADVERTISEMENT</div>
+        </div>
+
+        <!-- Footer -->
+        <footer id="main-footer">
+            <p>&copy; 2026 세종·웅진 역사 탐정. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Main Logic Script -->
+    <script src="app.js"></script>
+</body>
+</html>
