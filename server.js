@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config({ path: require("path").join(__dirname, ".env") });
 const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
@@ -21,15 +21,36 @@ const upload = multer({ limits: { fileSize: 10 * 1024 * 1024 } });
 
 let supabase = null;
 let supabaseUrl = process.env.SUPABASE_URL;
+let supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
 
-// URL 끝자리에 슬래시(/)가 포함된 경우 위생화 처리 (PGRST125 에러 방지)
+// 1. 따옴표가 있을 경우 제거 및 공백 위생화
+if (supabaseUrl) {
+    supabaseUrl = supabaseUrl.replace(/['"]/g, "").trim();
+}
+if (supabaseAnonKey) {
+    supabaseAnonKey = supabaseAnonKey.replace(/['"]/g, "").trim();
+}
+
+// 2. URL 끝자리에 슬래시(/)가 포함된 경우 제거 (PGRST125 에러 방지)
 if (supabaseUrl && supabaseUrl.endsWith("/")) {
     supabaseUrl = supabaseUrl.slice(0, -1);
 }
 
-if (supabaseUrl && process.env.SUPABASE_ANON_KEY && 
-    !supabaseUrl.includes("YOUR_SUPABASE")) {
-    supabase = createClient(supabaseUrl, process.env.SUPABASE_ANON_KEY);
+// 3. API URL 대신 DB 연결 문자열(postgresql://)을 잘못 넣었는지 확인
+if (supabaseUrl && (supabaseUrl.startsWith("postgres://") || supabaseUrl.startsWith("postgresql://"))) {
+    console.error(`
+  ======================================================
+  ❌ [SUPABASE_URL 설정 오류 감지]
+  API URL(https://...) 대신 데이터베이스 연결 문자열(postgresql://...)이 입력되었습니다.
+  Supabase 대시보드 -> Settings -> API -> 'Project URL'의 https 주소로 변경해 주세요!
+  ======================================================
+  `);
+}
+
+if (supabaseUrl && supabaseAnonKey && 
+    !supabaseUrl.includes("YOUR_SUPABASE") && 
+    !supabaseUrl.startsWith("postgres")) {
+    supabase = createClient(supabaseUrl, supabaseAnonKey);
     console.log("🟢 Supabase 클라이언트 연결 설정 완료");
 } else {
     console.warn("⚠️ Supabase 설정(.env)이 완료되지 않았습니다. 임시 로컬 메모리 DB를 사용합니다.");
@@ -207,7 +228,7 @@ app.post("/api/scan", async (req, res) => {
         try {
             const base64Data = image.split(",")[1] || image;
             const mimeType = image.split(";")[0].split(":")[1] || "image/jpeg";
-            const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+            const geminiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-3.5-flash:generateContent?key=${GEMINI_API_KEY}`;
             
             // 이 유적지에 속한 모든 등록 유물 리스트 구성
             const relicListString = Object.entries(targetLoc.relics)
