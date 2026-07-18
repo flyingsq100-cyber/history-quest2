@@ -206,8 +206,8 @@ app.post("/api/scan", async (req, res) => {
         const distance = getDistance(parseFloat(lat), parseFloat(lng), targetLoc.lat, targetLoc.lng);
         console.log(`📍 위치 비교: 사용자 위치 <-> 유적지 [${targetLoc.name}] 거리: ${distance.toFixed(1)}m`);
 
-        // 유적지 반경 200m 이내 도달 여부
-        if (distance > 200) {
+        // 유적지 반경 800m 이내 도달 여부 (GPS 오차 및 공원 크기 대비 완화)
+        if (distance > 800) {
             return res.json({
                 success: false,
                 errorType: "GPS_MISMATCH",

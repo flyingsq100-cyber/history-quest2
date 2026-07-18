@@ -507,7 +507,7 @@ function determineLocationFromGPS(lat, lng) {
     // 하버사인 거리 계산 적용
     for (const [locId, locData] of Object.entries(LOCATIONS_DB)) {
         const dist = getDistance(lat, lng, locData.gps.lat, locData.gps.lng);
-        if (dist <= 200) { // 반경 200m 이내
+        if (dist <= 800) { // 반경 800m 이내로 대폭 완화
             matchedLocId = locId;
             break;
         }
