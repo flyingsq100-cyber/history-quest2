@@ -321,7 +321,128 @@ const LOCATIONS_DB = {
                         <path d="M5,88 L95,88 L90,95 L10,95 Z" fill="#78350f" opacity="0.8"/>
                       </svg>`,
                 official: "한솔동 1호 석실분은 세종 역사공원 내부에 보호각을 씌워 노출 보존하고 있는 백제 시대 돌방무덤입니다. 둥글고 납작한 천연 돌을 벽돌처럼 겹겹이 정교하게 쌓아 올려 내부 공간을 조성한 형태를 보여줍니다.",
-                legend: "이 석실분은 하늘과 소통하기 쉽도록 위쪽이 열린 원형 제단 형태로 설계되었다는 야사가 있습니다. 주변 주민들 사이에서는 달이 유독 밝은 밤 1호 석실분 주변을 돌며 마음속 소원을 빌면 하늘이 그 뜻을 굽어살펴 소원이 이루어진다는 평화롭고 친근한 이야기가 민간에 전해집니다."
+                legend: "이 고분 주변에는 예로부터 밤이 되면 정체불명의 푸른 불빛이 둥둥 떠다닌다는 '백제고분의 도깨비불' 설화가 유명했습니다. 옛 연기군 시절 어르신들은 이를 '무덤 속에 잠든 백제 수장층의 넋이 밝히는 수호 등불'이라 부르며, 밤에는 고분 근처를 혼자 다니지 말라고 어린아이들을 타일렀다는 묘하고 서늘한 민담이 전해집니다."
+            }
+        ]
+    },
+    hapgang: {
+        id: "hapgang",
+        name: "🌊 세종 합강 유원지",
+        desc: "금강과 미호강 두 큰 물줄기가 하나로 모이는 곳으로, 예로부터 천지신명의 기운이 결집되어 풍농과 마을의 영구 평안을 빌던 신성한 강가이자 수려한 유원지입니다.",
+        gps: { lat: 36.4950, lng: 127.3292 },
+        story: {
+            official: "합강정은 금강과 미호강이 만나는 수려한 경관을 바라보기 위해 건립된 정자입니다. 합류 지점 고유의 웅장한 물길 흐름을 한눈에 감상할 수 있는 생태 관람의 거점입니다.",
+            legend: "<b>[합강의 신령]</b><br>합강은 두 성질의 강이 조화롭게 섞이는 곳으로 하늘의 신령이 거하는 물의 중심처라 여겼습니다. 옛 한반도인들은 풍년과 마을의 무사태평을 바라며 정성스럽게 떡과 오곡을 나룻배에 실어 강 한가운데에 제물로 바치는 '합강 신령 기원제'의 전통이 구전으로 전해집니다.<br><br><b>[금강의 용 이야기]</b><br>옛날 사람들은 금강에 큰 용이 산다고 믿었습니다. 큰비가 오거나 안개가 짙게 끼는 날이면 용이 승천하려고 물을 뒤흔들었으며, 강가에서 함부로 소리를 지르거나 돌을 던지면 용의 노여움을 사 폭우가 내린다고 조상들이 아이들을 타일렀던 신비로운 용 설화가 내려옵니다."
+        },
+        relics: []
+    },
+    janggun: {
+        id: "janggun",
+        name: "⛰️ 세종 장군산",
+        desc: "세종시 장군면에 걸쳐 있는 명산으로, 나라를 구하려 싸운 백제 장군의 넋이 바위로 굳어 수호신이 되었다는 웅장한 호국 민담이 전수되고 있는 산입니다.",
+        gps: { lat: 36.4853, lng: 127.1895 },
+        story: {
+            official: "장군산 봉우리 정상에 위치한 기둥 모양의 천연 거대 암벽(토르)으로, 형상이 용맹스러운 장수가 서 있는 모습을 연상시킵니다.",
+            legend: "<b>[장군바위 전설]</b><br>전설에 따르면 백제의 한 장군이 나라를 지키다 전사했고, 그의 넋이 바위가 되어 마을을 지켜 준다고 했습니다. 적들이 쳐들어올 때마다 바위가 장군의 형상으로 변해 적들을 물리쳤다는 호국 야사가 내려옵니다."
+        },
+        relics: []
+    },
+    biamsa: {
+        id: "biamsa",
+        name: "⛩️ 세종 비암사 역사길",
+        desc: "천년의 역사를 품은 세종의 대표 사찰 비암사 일대로, 신비로운 도깨비 도로에서 시작하여 800년 된 느티나무, 극락보전, 그리고 삼층석탑까지 순서대로 이어지는 흥미로운 전통 이야기길입니다.",
+        gps: { lat: 36.6055, lng: 127.2150 },
+        relics: [
+            {
+                id: "relic_biamsa_1",
+                name: "비암사 도깨비 도로",
+                hint: "내리막길이 오르막길처럼 보이는 신비로운 착시 현상의 도로 구간을 카메라에 비추어 촬영하세요.",
+                svg: `<svg viewBox="0 0 100 100" width="120" height="120">
+                        <rect x="0" y="0" width="100" height="100" fill="none"/>
+                        <!-- S-curve road vanishing upwards -->
+                        <path d="M15,95 Q50,75 35,45 T75,5 L60,5 T25,45 Q40,75 5,95 Z" fill="#475569" stroke="#334155" stroke-width="1.5"/>
+                        <!-- Dashed yellow center line -->
+                        <path d="M10,95 Q45,75 30,45 T70,5" fill="none" stroke="#eab308" stroke-width="1.5" stroke-dasharray="3, 3"/>
+                        <!-- Surrounding pine trees -->
+                        <polygon points="12,40 5,60 20,60" fill="#047857"/>
+                        <polygon points="85,25 78,45 92,45" fill="#047857"/>
+                        <!-- Goblin footprint or mask symbol -->
+                        <circle cx="50" cy="55" r="8" fill="#991b1b" opacity="0.8"/>
+                        <polygon points="46,55 54,55 50,63" fill="#000"/>
+                        <circle cx="47" cy="52" r="1.5" fill="#fff"/>
+                        <circle cx="53" cy="52" r="1.5" fill="#fff"/>
+                      </svg>`,
+                official: "비암사 도깨비 도로는 내리막길이 시각적 착시로 인해 오르막길처럼 보이는 신기한 지형으로, 차를 세워두면 중력을 거슬러 위로 올라가는 듯한 재미있는 경험을 할 수 있는 곳입니다.",
+                legend: "옛날 이곳 골짜기에는 장난치기 좋아하는 아기 도깨비들이 밤마다 지나가는 수레를 거꾸로 잡아끌며 장난을 쳤다고 합니다. 사람들은 '도깨비의 요술에 홀렸다'고 말하며, 도깨비들이 물길과 길을 거꾸로 뒤집어 놓아 밤길 가던 나그네들이 방향을 잃고 뱅뱅 돌았다는 우스꽝스러운 구전 야사가 전수됩니다."
+            },
+            {
+                id: "relic_biamsa_2",
+                name: "800년 느티나무",
+                hint: "비암사 초입을 굳건히 지키고 서 있는, 둘레가 거대하고 잎이 무성한 800년 수령의 느티나무 보호수를 촬영하세요.",
+                svg: `<svg viewBox="0 0 100 100" width="120" height="120">
+                        <rect x="0" y="0" width="100" height="100" fill="none"/>
+                        <!-- Tree trunk -->
+                        <path d="M42,90 Q40,65 46,50 L54,50 Q60,65 58,90 Z" fill="#78350f" stroke="#451a03" stroke-width="2"/>
+                        <!-- Tree roots -->
+                        <path d="M30,90 Q40,85 44,78" fill="none" stroke="#78350f" stroke-width="3"/>
+                        <path d="M70,90 Q60,85 56,78" fill="none" stroke="#78350f" stroke-width="3"/>
+                        <!-- Thick green leaves -->
+                        <circle cx="50" cy="35" r="26" fill="#15803d" stroke="#166534" stroke-width="1.5"/>
+                        <circle cx="34" cy="40" r="18" fill="#166534" opacity="0.9"/>
+                        <circle cx="66" cy="40" r="18" fill="#166534" opacity="0.9"/>
+                        <circle cx="50" cy="22" r="15" fill="#22c55e" opacity="0.7"/>
+                      </svg>`,
+                official: "비암사 느티나무는 수령이 약 800년에 달하는 세종시 보호수로, 높이 15m, 둘레 5m가 넘는 거대한 수령을 자랑합니다. 이 느티나무 앞에는 예로부터 <b>\"아니 오신 듯 다녀가시옵소서\"</b>라는 서정적인 문구가 새겨져 있어, 고즈넉한 절을 조용히 둘러보고 자연을 온전히 아끼며 다녀가 달라는 깊은 여운을 줍니다.",
+                legend: "가장 널리 알려진 신비로운 구전은 바로 <b>'한 해의 풍흉을 점치는 나무'</b>라는 점입니다. 매년 봄, 이 신령한 느티나무의 🌿 <b>새 잎이 위쪽부터 피어나면 풍년</b>이 들고, 🍂 <b>아래쪽부터 피어나면 흉년</b>이 든다고 믿어 옛 조상들은 매년 봄마다 이 나무의 새순을 살펴보며 농사 점을 쳤습니다. 또한, 큰 재앙이나 기근이 오기 전날 밤에는 나무가 슬픈 우는 소리를 내어 사람들에게 귀띔해 주었다는 따스한 수호신 전설이 내려옵니다."
+            },
+            {
+                id: "relic_biamsa_3",
+                name: "비암사 극락보전 (대웅전)",
+                hint: "비암사의 본전이자 정교한 처마와 단청이 아름다운 유형문화재 극락보전 전경을 스캔하세요.",
+                svg: `<svg viewBox="0 0 100 100" width="120" height="120">
+                        <rect x="0" y="0" width="100" height="100" fill="none"/>
+                        <!-- Base Platform -->
+                        <rect x="15" y="70" width="70" height="15" fill="#6b7280" stroke="#374151" stroke-width="1.5"/>
+                        <!-- Stairs -->
+                        <polygon points="44,85 56,85 54,70 46,70" fill="#4b5563"/>
+                        <!-- Columns -->
+                        <line x1="22" y1="70" x2="22" y2="40" stroke="#991b1b" stroke-width="3"/>
+                        <line x1="36" y1="70" x2="36" y2="40" stroke="#991b1b" stroke-width="3"/>
+                        <line x1="64" y1="70" x2="64" y2="40" stroke="#991b1b" stroke-width="3"/>
+                        <line x1="78" y1="70" x2="78" y2="40" stroke="#991b1b" stroke-width="3"/>
+                        <!-- Doors and windows detail -->
+                        <rect x="42" y="44" width="16" height="26" fill="#eab308" opacity="0.6"/>
+                        <!-- Roof (Double layer tier) -->
+                        <path d="M8,42 L92,42 L84,32 L16,32 Z" fill="#1e293b" stroke="#0f172a" stroke-width="2"/>
+                        <path d="M12,32 Q50,15 88,32 L84,24 Q50,10 16,24 Z" fill="#0f172a" stroke="#d4af37" stroke-width="1"/>
+                      </svg>`,
+                official: "비암사 극락보전은 세종시 유형문화재로 지정되어 있으며, 조선 후기의 화려한 다포식 건축 양식을 보여주는 불교 목조 전각입니다. 내부에는 아미타여래좌상이 모셔져 있습니다.",
+                legend: "비암사(碑庵寺)는 삼국시대 백제가 멸망한 후, 백제의 유민들이 잃어버린 조국 백제 왕실의 왕들과 전사한 장군들의 명복을 빌기 위해 깊은 산속에 창건한 '망국의 호국 사찰'이라는 가슴 아픈 비화가 전해집니다. 이 극락보전에서 정성껏 백제의 제사를 지내자, 하늘이 백제 유민들의 통곡을 가엽게 여겨 오색 무지개구름을 피워 올려 영혼들을 위로했다는 역사적 설화가 내려옵니다."
+            },
+            {
+                id: "relic_biamsa_4",
+                name: "비암사 삼층석탑",
+                hint: "극락보전 뒤편 언덕으로 올라가, 백제 시대 석탑 양식을 계승한 고아한 삼층석탑을 스캔하여 최종 이야기를 해금하세요.",
+                svg: `<svg viewBox="0 0 100 100" width="120" height="120">
+                        <rect x="0" y="0" width="100" height="100" fill="none"/>
+                        <!-- Stone steps/base -->
+                        <rect x="30" y="80" width="40" height="10" fill="#9ca3af" stroke="#4b5563" stroke-width="1.5"/>
+                        <rect x="34" y="72" width="32" height="8" fill="#9ca3af" stroke="#4b5563" stroke-width="1.5"/>
+                        <!-- Tier 1 -->
+                        <rect x="38" y="58" width="24" height="14" fill="#9ca3af" stroke="#4b5563" stroke-width="1.5"/>
+                        <path d="M35,58 L65,58 L62,54 L38,54 Z" fill="#4b5563"/>
+                        <!-- Tier 2 -->
+                        <rect x="42" y="44" width="16" height="10" fill="#9ca3af" stroke="#4b5563" stroke-width="1.5"/>
+                        <path d="M39,44 L61,44 L59,41 L41,41 Z" fill="#4b5563"/>
+                        <!-- Tier 3 -->
+                        <rect x="45" y="32" width="10" height="9" fill="#9ca3af" stroke="#4b5563" stroke-width="1.5"/>
+                        <path d="M43,32 L57,32 L55,29 L45,29 Z" fill="#4b5563"/>
+                        <!-- Finial top spike -->
+                        <line x1="50" y1="29" x2="50" y2="12" stroke="#d4af37" stroke-width="2"/>
+                        <circle cx="50" cy="18" r="3" fill="#d4af37"/>
+                      </svg>`,
+                official: "비암사 삼층석탑은 고려시대 전기에 건립된 것으로 추정되는 전형적인 석탑으로, 백제 석탑의 전통적 기법인 지붕돌(옥개석)의 부드러운 곡선미를 고스란히 반영하고 있습니다.",
+                legend: "이 삼층석탑은 백제 멸망 후 백제의 귀족들이 남몰래 기증하여 나라의 부활을 기도하며 기원한 기념탑이라는 설이 있습니다. 전설에 따르면 삼층석탑에 손을 얹고 간절히 삼 세 번 탑돌이를 돌며 백제인들의 염원처럼 국가의 번영과 자신의 가장 절실한 가족의 건강을 기도하면 무덤 뒤 호국 영령들이 감응하여 그 소원을 반드시 이루어 준다는 탑돌이 영험담이 깃들어 있습니다."
             }
         ]
     }
@@ -358,7 +479,175 @@ document.addEventListener("DOMContentLoaded", () => {
     initCameraIntegration();
     initModal();
     initAdSense();
+    loadGoogleMapsSdk();
 });
+
+// ==========================================
+// 3.5 구글 지도 동적 로드 및 시각화 (Google Maps API)
+// ==========================================
+
+let googleMapObj = null;
+let userLocationMarker = null;
+let locationMarkers = {};
+
+async function loadGoogleMapsSdk() {
+    try {
+        const response = await fetch("/api/config");
+        const config = await response.json();
+        const apiKey = config.mapsApiKey || "";
+        
+        const script = document.createElement("script");
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initGoogleMap`;
+        script.async = true;
+        script.defer = true;
+        
+        script.onerror = () => {
+            console.error("구글 지도 로딩 실패: 네트워크 또는 API Key가 제공되지 않았습니다.");
+            document.getElementById("map").innerHTML = `<div style="color:var(--gold-color); padding:40px 20px; text-align:center; font-size:0.9rem;">🗺️ 구글 지도 API가 비활성화되어 있습니다.<br><span style="font-size:0.75rem; color:#888;">(.env 파일에 GOOGLE_MAPS_API_KEY를 등록해 주세요.)</span></div>`;
+        };
+        
+        document.head.appendChild(script);
+    } catch (err) {
+        console.error("지도 설정 로딩 장애:", err);
+    }
+}
+
+// 구글 지도 콜백 초기화 (윈도우 전역 함수로 노출)
+window.initGoogleMap = function() {
+    console.log("🟢 구글 지도 SDK 로드 완료. 지도 초기화 시작.");
+    const mapElement = document.getElementById("map");
+    if (!mapElement) return;
+
+    // 세종시 중심 좌표로 설정
+    const centerLatLng = { lat: 36.4800, lng: 127.2890 };
+    
+    // 다크 테마 스타일 커스텀 적용
+    const darkStyle = [
+        { elementType: "geometry", stylers: [{ color: "#212121" }] },
+        { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
+        { elementType: "labels.text.fill", stylers: [{ color: "#757575" }] },
+        { elementType: "labels.text.stroke", stylers: [{ color: "#212121" }] },
+        { featureType: "road", elementType: "geometry", stylers: [{ color: "#2c2c2c" }] },
+        { featureType: "water", elementType: "geometry", stylers: [{ color: "#000000" }] }
+    ];
+
+    googleMapObj = new google.maps.Map(mapElement, {
+        zoom: 10.5,
+        center: centerLatLng,
+        styles: darkStyle,
+        mapTypeControl: false,
+        streetViewControl: false,
+        fullscreenControl: false
+    });
+
+    // 유적지 마커 드로잉
+    drawLocationMarkersOnMap();
+    updateMapMarkers();
+};
+
+function drawLocationMarkersOnMap() {
+    if (!googleMapObj) return;
+
+    // 기존 마커가 있다면 모두 제거
+    Object.values(locationMarkers).forEach(m => m.setMap(null));
+    locationMarkers = {};
+
+    Object.entries(LOCATIONS_DB).forEach(([locId, locData]) => {
+        const markerColor = APP_STATE.currentLocId === locId ? "#d4af37" : "#78716c"; // 골드 또는 그레이
+        
+        // 커스텀 SVG 마커 핀
+        const markerPin = {
+            path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-12-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z",
+            fillColor: markerColor,
+            fillOpacity: 1,
+            strokeColor: "#000",
+            strokeWeight: 1.5,
+            scale: 1.2,
+            anchor: new google.maps.Point(12, 22)
+        };
+
+        const marker = new google.maps.Marker({
+            position: { lat: locData.gps.lat, lng: locData.gps.lng },
+            map: googleMapObj,
+            title: locData.name,
+            icon: markerPin
+        });
+
+        // 인포윈도우 추가
+        const total = locData.relics.length;
+        const unlocked = total === 0 ? (APP_STATE.unlockedRelics.includes(locId) ? 1 : 0) : locData.relics.filter(r => APP_STATE.unlockedRelics.includes(r.id)).length;
+        const statusText = total === 0 ? (unlocked === 1 ? "방문 완료" : "미방문") : `${unlocked}/${total} 발견`;
+
+        const infoWindow = new google.maps.InfoWindow({
+            content: `<div style="color:#000; font-family:'Noto Sans KR', sans-serif; padding:5px; line-height: 1.3;">
+                        <h4 style="margin:0 0 4px 0; font-size:0.85rem;">${locData.name}</h4>
+                        <p style="margin:0; font-size:0.75rem; color:#555;">탐험 상태: <b>${statusText}</b></p>
+                      </div>`
+        });
+
+        marker.addListener("click", () => {
+            // 마커 클릭 시 가상 GPS 시뮬레이션 작동
+            if (!APP_STATE.isRealGpsActive) {
+                document.querySelectorAll(".gps-btn[data-loc]").forEach(b => {
+                    if (b.getAttribute("data-loc") === locId) {
+                        b.click();
+                    }
+                });
+            }
+            infoWindow.open(googleMapObj, marker);
+        });
+
+        locationMarkers[locId] = marker;
+    });
+}
+
+function updateMapMarkers() {
+    if (!googleMapObj) return;
+
+    // 사용자 위치 표시 (실제 또는 가상)
+    let currentLat = APP_STATE.currentCoordinates.lat;
+    let currentLng = APP_STATE.currentCoordinates.lng;
+
+    // 가상 GPS 설정 상태면 가상 유적지 위치로 마커를 그려줍니다.
+    if (APP_STATE.currentLocId !== "none" && !APP_STATE.isRealGpsActive) {
+        currentLat = LOCATIONS_DB[APP_STATE.currentLocId].gps.lat;
+        currentLng = LOCATIONS_DB[APP_STATE.currentLocId].gps.lng;
+    }
+
+    if (currentLat && currentLng) {
+        const userLatLng = { lat: currentLat, lng: currentLng };
+
+        if (!userLocationMarker) {
+            // 사용자 위치 파란색 레이더 형태 마커 생성
+            userLocationMarker = new google.maps.Marker({
+                position: userLatLng,
+                map: googleMapObj,
+                title: "현재 위치",
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    scale: 6,
+                    fillColor: "#3b82f6",
+                    fillOpacity: 1,
+                    strokeColor: "#ffffff",
+                    strokeWeight: 1.5
+                }
+            });
+        } else {
+            userLocationMarker.setPosition(userLatLng);
+        }
+
+        // 마커 클릭 상태 갱신을 위해 마커 색상 리로드
+        drawLocationMarkersOnMap();
+        
+        // 지도를 현재 위치 중심으로 살짝 매끄럽게 이동
+        googleMapObj.panTo(userLatLng);
+    } else {
+        if (userLocationMarker) {
+            userLocationMarker.setMap(null);
+            userLocationMarker = null;
+        }
+    }
+}
 
 // 구글 애드센스 동적 로드 초기화
 function initAdSense() {
@@ -431,13 +720,22 @@ function initGPSSimulator() {
 function setVirtualGPS(locId) {
     APP_STATE.currentLocId = locId;
     APP_STATE.selectedRelicToScan = null;
-    APP_STATE.currentCoordinates = { lat: null, lng: null, accuracy: null };
     
-    document.getElementById("gps-coordinates-display").textContent = "가상 시뮬레이터 구동 중";
+    if (locId === "none") {
+        APP_STATE.currentCoordinates = { lat: null, lng: null, accuracy: null };
+        document.getElementById("gps-coordinates-display").textContent = "가상 시뮬레이터 수동 대기";
+    } else {
+        const loc = LOCATIONS_DB[locId];
+        APP_STATE.currentCoordinates = { lat: loc.gps.lat, lng: loc.gps.lng, accuracy: 5 };
+        document.getElementById("gps-coordinates-display").textContent = 
+            `가상 GPS -> 위도: ${loc.gps.lat.toFixed(5)} | 경도: ${loc.gps.lng.toFixed(5)}`;
+    }
+    
     updateGPSStateUI();
     renderExplorerView();
     renderRelicCameraGrid();
     updateShutterButtonState();
+    updateMapMarkers();
 }
 
 function initRealGPSButton() {
@@ -521,6 +819,7 @@ function determineLocationFromGPS(lat, lng) {
         renderRelicCameraGrid();
         updateShutterButtonState();
     }
+    updateMapMarkers();
 }
 
 // 거리 계산 헬퍼
@@ -568,7 +867,6 @@ function renderExplorerView() {
 
     offlineCard.classList.add("hidden");
     infoCard.classList.remove("hidden");
-    cameraSection.classList.remove("hidden");
 
     const locData = LOCATIONS_DB[APP_STATE.currentLocId];
     document.getElementById("location-name").textContent = locData.name;
@@ -576,6 +874,32 @@ function renderExplorerView() {
 
     const questContainer = document.getElementById("quest-item-container");
     questContainer.innerHTML = "";
+
+    // 유물이 없는 경치형 유적지인 경우
+    if (!locData.relics || locData.relics.length === 0) {
+        cameraSection.classList.add("hidden");
+        
+        questContainer.innerHTML = `
+            <div class="folklore-story-card glass-card" style="margin-top: 15px; padding: 20px; border: 1px solid var(--gold-color); border-radius: 8px;">
+                <div style="font-weight: 700; color: var(--gold-color); font-size: 1.1rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                    ✨ 위치 도달! 역사/전설 해금 완료
+                </div>
+                <div class="story-tab-panes" style="text-align: left;">
+                    <h4 style="margin: 10px 0 5px 0; color: #fff;">📖 역사 기록 (Official)</h4>
+                    <p style="font-size: 0.9rem; line-height: 1.5; color: var(--text-secondary); margin-bottom: 15px;">${locData.story.official}</p>
+                    <h4 style="margin: 10px 0 5px 0; color: #fff;">🌌 구전 전설 (Folklore)</h4>
+                    <p style="font-size: 0.9rem; line-height: 1.5; color: var(--text-secondary);">${locData.story.legend}</p>
+                </div>
+            </div>
+        `;
+        
+        // 자동 잠금 해제 실행
+        autoUnlockLocation(APP_STATE.currentLocId);
+        return;
+    }
+
+    // 유물이 있는 일반 유적지인 경우
+    cameraSection.classList.remove("hidden");
 
     locData.relics.forEach((relic, idx) => {
         const isCompleted = APP_STATE.unlockedRelics.includes(relic.id);
@@ -602,6 +926,34 @@ function renderExplorerView() {
         
         questContainer.appendChild(questItem);
     });
+}
+
+// 유물이 없는 유적지에 대해 자동으로 방문 기록을 동기화하고 잠금을 푸는 헬퍼
+async function autoUnlockLocation(locId) {
+    if (APP_STATE.unlockedRelics.includes(locId)) return;
+    
+    APP_STATE.unlockedRelics.push(locId);
+    localStorage.setItem("sejong_history_unlocked", JSON.stringify(APP_STATE.unlockedRelics));
+    renderStampBook();
+    renderRelicCameraGrid();
+
+    try {
+        await fetch("/api/scan", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                image: "data:image/jpeg;base64,auto_unlocked_scenic_spot",
+                lat: APP_STATE.currentCoordinates.lat,
+                lng: APP_STATE.currentCoordinates.lng,
+                relicId: locId,
+                currentLocId: locId,
+                deviceId: APP_STATE.deviceId,
+                bypassGps: true // 자동 방문 해제이므로 거리 체크는 클라이언트 진입 정보로 갈음
+            })
+        });
+    } catch (e) {
+        console.error("Supabase scenic spot auto-unlock sync failed:", e);
+    }
 }
 
 // ==========================================
@@ -734,17 +1086,40 @@ function renderRelicCameraGrid() {
     Object.values(LOCATIONS_DB).forEach(loc => {
         loc.relics.forEach(relic => {
             const isCompleted = APP_STATE.unlockedRelics.includes(relic.id);
+            
+            // 비암사 순서형 락(Lock) 조건 감사
+            let isLockedBySequence = false;
+            if (relic.id.startsWith("relic_biamsa_")) {
+                const order = parseInt(relic.id.split("_").pop());
+                if (order > 1) {
+                    const prevRelicId = `relic_biamsa_${order - 1}`;
+                    if (!APP_STATE.unlockedRelics.includes(prevRelicId)) {
+                        isLockedBySequence = true;
+                    }
+                }
+            }
+
             const card = document.createElement("div");
-            card.className = `relic-btn-card ${APP_STATE.selectedRelicToScan?.id === relic.id ? 'selected' : ''}`;
+            card.className = `relic-btn-card ${APP_STATE.selectedRelicToScan?.id === relic.id ? 'selected' : ''} ${isLockedBySequence ? 'relic-locked' : ''}`;
+            
             if (isCompleted) card.style.opacity = "0.7";
+            if (isLockedBySequence) card.style.opacity = "0.4";
             
             card.innerHTML = `
-                ${relic.svg}
-                <span class="relic-btn-name">${relic.name}</span>
+                <div class="relic-svg-wrapper" style="position:relative; width:100%; display:flex; justify-content:center;">
+                    ${relic.svg}
+                    ${isLockedBySequence ? '<div style="position:absolute; top:0; left:0; width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.6); font-size:1.2rem; color:#fff; border-radius:4px;">🔒</div>' : ''}
+                </div>
+                <span class="relic-btn-name">${isLockedBySequence ? '🔒 잠겨있음' : relic.name}</span>
                 <span class="relic-btn-loc">${loc.name.split(" ").slice(1).join(" ")}</span>
             `;
 
             card.addEventListener("click", () => {
+                if (isLockedBySequence) {
+                    alert(`🔒 잠겨있음!\n\n이 단계를 스캔하려면 비암사 코스 순서에 따라 이전 단계를 먼저 완료하셔야 합니다.`);
+                    return;
+                }
+                
                 document.querySelectorAll(".relic-btn-card").forEach(c => c.classList.remove("selected"));
                 
                 if (APP_STATE.selectedRelicToScan?.id === relic.id) {
@@ -938,8 +1313,22 @@ function renderStampBook() {
 
     Object.values(LOCATIONS_DB).forEach(loc => {
         const totalRelics = loc.relics.length;
-        const unlockedCount = loc.relics.filter(r => APP_STATE.unlockedRelics.includes(r.id)).length;
-        const isCompleted = totalRelics === unlockedCount;
+        
+        let unlockedCount = 0;
+        let isCompleted = false;
+        let progressText = "";
+        
+        if (totalRelics === 0) {
+            // 유물이 없는 경치형 유적지
+            unlockedCount = APP_STATE.unlockedRelics.includes(loc.id) ? 1 : 0;
+            isCompleted = unlockedCount === 1;
+            progressText = isCompleted ? "방문 완료" : "미방문";
+        } else {
+            // 유물이 있는 일반 유적지
+            unlockedCount = loc.relics.filter(r => APP_STATE.unlockedRelics.includes(r.id)).length;
+            isCompleted = totalRelics === unlockedCount;
+            progressText = `${unlockedCount} / ${totalRelics} 발견`;
+        }
 
         const card = document.createElement("div");
         card.className = `stamp-card ${isCompleted ? 'unlocked' : ''}`;
@@ -951,7 +1340,7 @@ function renderStampBook() {
                 ${stampSvg}
             </div>
             <div class="stamp-card-title">${loc.name.split(" ").slice(1).join(" ")}</div>
-            <div class="stamp-card-progress">${unlockedCount} / ${totalRelics} 발견</div>
+            <div class="stamp-card-progress">${progressText}</div>
         `;
 
         grid.appendChild(card);
@@ -979,6 +1368,18 @@ function getStampSVG(locId) {
             break;
         case "hongpanseo":
             innerGraphic = `<path d="M20,55 L50,25 L80,55 M30,55 L30,75 L70,75 L70,55" fill="none"/>`;
+            break;
+        case "hansol":
+            innerGraphic = `<circle cx="50" cy="65" r="22" fill="none"/><path d="M20,65 Q50,40 80,65 M40,65 Q50,50 60,65" fill="none"/>`;
+            break;
+        case "hapgang":
+            innerGraphic = `<path d="M20,48 Q35,38 50,48 T80,48 M20,60 Q35,50 50,60 T80,60" fill="none" stroke-width="2"/>`;
+            break;
+        case "janggun":
+            innerGraphic = `<polygon points="50,28 80,72 20,72" fill="none" stroke-width="2"/><polygon points="38,45 60,72 16,72" fill="none" stroke-width="1.2"/>`;
+            break;
+        case "biamsa":
+            innerGraphic = `<path d="M50,18 L50,82 M25,42 L75,42 M35,28 L65,28 M30,56 L70,56 M20,72 L80,72" fill="none" stroke-dasharray="1 1" stroke-width="1.5"/><rect x="45" y="72" width="10" height="10" fill="none"/>`;
             break;
     }
 

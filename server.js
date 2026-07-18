@@ -135,6 +135,29 @@ const LOCATIONS_DB = {
             "relic_hansol_1": { name: "한솔동 2호 석실분" },
             "relic_hansol_2": { name: "한솔동 1호 석실분" }
         }
+    },
+    hapgang: {
+        name: "세종 합강 유원지",
+        lat: 36.4950,
+        lng: 127.3292,
+        relics: {}
+    },
+    janggun: {
+        name: "세종 장군산",
+        lat: 36.4853,
+        lng: 127.1895,
+        relics: {}
+    },
+    biamsa: {
+        name: "세종 비암사 역사길",
+        lat: 36.6055,
+        lng: 127.2150,
+        relics: {
+            "relic_biamsa_1": { name: "비암사 도깨비 도로", lat: 36.6015, lng: 127.2185 },
+            "relic_biamsa_2": { name: "800년 느티나무", lat: 36.6052, lng: 127.2155 },
+            "relic_biamsa_3": { name: "비암사 대웅전 (극락보전)", lat: 36.6062, lng: 127.2142 },
+            "relic_biamsa_4": { name: "비암사 삼층석탑", lat: 36.6066, lng: 127.2140 }
+        }
     }
 };
 
@@ -152,9 +175,12 @@ function getDistance(lat1, lon1, lat2, lon2) {
     return R * c; // 미터(m) 단위 반환
 }
 
-// ==========================================
-// 3. API 라우트 정의 (Backend Routes)
-// ==========================================
+// 3.0 설정 정보 및 API 키 로드
+app.get("/api/config", (req, res) => {
+    return res.json({
+        mapsApiKey: process.env.GOOGLE_MAPS_API_KEY || ""
+    });
+});
 
 // 3.1 사용자의 유물 잠금해제 기록 가져오기
 app.get("/api/progress", async (req, res) => {
@@ -203,19 +229,90 @@ app.post("/api/scan", async (req, res) => {
             return res.status(400).json({ error: "실제 GPS 좌표가 수신되지 않았습니다." });
         }
         
-        const distance = getDistance(parseFloat(lat), parseFloat(lng), targetLoc.lat, targetLoc.lng);
-        console.log(`📍 위치 비교: 사용자 위치 <-> 유적지 [${targetLoc.name}] 거리: ${distance.toFixed(1)}m`);
+        // 개별 유물 고유 좌표가 있는 경우 우선 적용, 없는 경우 유적지 대표 좌표 적용
+        const targetRelicObj = (relicId && targetLoc.relics) ? targetLoc.relics[relicId] : null;
+        const targetLat = (targetRelicObj && targetRelicObj.lat) ? targetRelicObj.lat : targetLoc.lat;
+        const targetLng = (targetRelicObj && targetRelicObj.lng) ? targetRelicObj.lng : targetLoc.lng;
+        const targetName = targetRelicObj ? targetRelicObj.name : targetLoc.name;
 
-        // 유적지 반경 800m 이내 도달 여부 (GPS 오차 및 공원 크기 대비 완화)
+        const distance = getDistance(parseFloat(lat), parseFloat(lng), targetLat, targetLng);
+        console.log(`📍 위치 비교: 사용자 위치 <-> 목표 [${targetName}] 거리: ${distance.toFixed(1)}m`);
+
+        // 유물/유적지 반경 800m 이내 도달 여부
         if (distance > 800) {
             return res.json({
                 success: false,
                 errorType: "GPS_MISMATCH",
-                message: `📍 위치 오차 감지! 현재 계신 곳이 '${targetLoc.name}'이(가) 아닌 것으로 분석됩니다. (목표지와의 거리: ${distance.toFixed(0)}m). 더 가까이 이동하신 후 스캔해주세요.`
+                message: `📍 위치 오차 감지! 현재 계신 곳이 '${targetName}' 주변이 아닌 것으로 분석됩니다. (목표지와의 거리: ${distance.toFixed(0)}m). 더 가까이 이동하신 후 스캔해주세요.`
             });
         }
     } else {
         console.log(`⚠️ GPS 검증 우회 활성화됨 (유적지: ${targetLoc.name})`);
+    }
+
+    // 2.7 순서형 퀘스트 검증 (비암사 코스)
+    if (relicId && relicId.startsWith("relic_biamsa_")) {
+        const order = parseInt(relicId.split("_").pop());
+        if (order > 1) {
+            const prevRelicId = `relic_biamsa_${order - 1}`;
+            if (supabase) {
+                try {
+                    const { data, error } = await supabase
+                        .from("user_progress")
+                        .select("relic_id")
+                        .eq("device_id", deviceId)
+                        .eq("relic_id", prevRelicId);
+                    if (error || !data || data.length === 0) {
+                        const prevName = targetLoc.relics[prevRelicId].name;
+                        return res.json({
+                            success: false,
+                            errorType: "SEQUENCE_ERROR",
+                            message: `🔒 잠겨있음! 이 단계는 비암사 코스 순서에 따라 진행해야 합니다.\n\n이전 단계인 [${prevName}]을(를) 먼저 완료해 주세요.`
+                        });
+                    }
+                } catch (err) {
+                    console.error("이전 단계 검증 에러:", err);
+                }
+            } else {
+                if (!localProgressMemory.has(prevRelicId)) {
+                    const prevName = targetLoc.relics[prevRelicId].name;
+                    return res.json({
+                        success: false,
+                        errorType: "SEQUENCE_ERROR",
+                        message: `🔒 잠겨있음! 이 단계는 비암사 코스 순서에 따라 진행해야 합니다.\n\n이전 단계인 [${prevName}]을(를) 먼저 완료해 주세요.`
+                    });
+                }
+            }
+        }
+    }
+
+    // 2.5 유물 없는 경치형 유적지 자동 해금 바이패스
+    if (relicId === currentLocId) {
+        if (supabase) {
+            try {
+                const { error } = await supabase
+                    .from("user_progress")
+                    .upsert({ 
+                        device_id: deviceId, 
+                        relic_id: relicId, 
+                        unlocked_at: new Date().toISOString() 
+                    }, { onConflict: "device_id,relic_id" });
+                if (error) throw error;
+                console.log(`💾 Supabase 자동저장 완료 (경치지): [Device: ${deviceId}] -> [Loc: ${relicId}]`);
+            } catch (err) {
+                console.error("💾 Supabase DB 자동저장 에러:", err);
+                localProgressMemory.add(relicId);
+            }
+        } else {
+            localProgressMemory.add(relicId);
+        }
+        
+        return res.json({
+            success: true,
+            confidence: 1.0,
+            reason: "유적지에 도달하여 전설이 자동 해금되었습니다.",
+            relicId: relicId
+        });
     }
 
     // 3. 실시간 AI 판독 (Gemini API 호출)
