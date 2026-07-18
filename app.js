@@ -673,9 +673,9 @@ function displayCapturedImage(base64Data) {
 
 function updateShutterButtonState() {
     const btn = document.getElementById("shutter-btn");
-    // 목표 유물이 설정되어 있고, 카메라 스트림이 켜져 있거나 이미 캡쳐/업로드된 사진이 있으면 버튼 활성화
+    // 카메라 스트림이 켜져 있거나 이미 캡처/업로드된 사진이 있으면 촬영 버튼 활성화 (유물 사전 선택이 필수가 아니도록 변경)
     const hasMedia = APP_STATE.cameraStreamObj !== null || APP_STATE.capturedImageBase64 !== null;
-    btn.disabled = !(APP_STATE.selectedRelicToScan && hasMedia);
+    btn.disabled = !hasMedia;
 }
 
 // 유물 셀렉터 렌더링
@@ -784,7 +784,8 @@ async function sendScanRequestToAIBackend() {
             image: APP_STATE.capturedImageBase64,
             lat: APP_STATE.currentCoordinates.lat,
             lng: APP_STATE.currentCoordinates.lng,
-            relicId: APP_STATE.selectedRelicToScan.id,
+            relicId: APP_STATE.selectedRelicToScan ? APP_STATE.selectedRelicToScan.id : null,
+            currentLocId: APP_STATE.currentLocId,
             deviceId: APP_STATE.deviceId,
             bypassGps: !APP_STATE.isRealGpsActive // 가상 GPS인 경우 거리 계산 필터링 우회
         };
@@ -803,10 +804,15 @@ async function sendScanRequestToAIBackend() {
         setTimeout(() => {
             overlay.classList.add("hidden");
             
-            if (result.success) {
-                // 획득 성공 -> 바로 스토리 팝업 띄우기
+            if (result.success && result.relicId) {
+                // 획득 성공 -> 자동 분석 판독한 유물 매칭 데이터를 획득
+                const matchedRelic = LOCATIONS_DB[APP_STATE.currentLocId].relics.find(r => r.id === result.relicId);
                 loadProgressFromServer();
-                openStoryModal(APP_STATE.selectedRelicToScan);
+                if (matchedRelic) {
+                    openStoryModal(matchedRelic);
+                } else {
+                    alert("성공적으로 판독되었으나 유물 정보를 동기화하지 못했습니다. 새로고침 후 확인해 주세요.");
+                }
             } else {
                 alert(`⚠️ 스캔 실패!\n\n${result.message}`);
                 resetCameraUI();

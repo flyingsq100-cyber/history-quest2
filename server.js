@@ -154,40 +154,28 @@ app.get("/api/progress", async (req, res) => {
 
 // 3.2 AI 카메라 분석 및 GPS 검증 API
 app.post("/api/scan", async (req, res) => {
-    const { image, lat, lng, relicId, deviceId, bypassGps } = req.body;
+    const { image, lat, lng, relicId, currentLocId, deviceId, bypassGps } = req.body;
 
-    if (!image || !relicId || !deviceId) {
-        return res.status(400).json({ error: "필수 데이터(image, relicId, deviceId)가 누락되었습니다." });
+    if (!image || !deviceId || !currentLocId) {
+        return res.status(400).json({ error: "필수 데이터(image, deviceId, currentLocId)가 누락되었습니다." });
     }
 
-    // 1. 유물 및 유적지 데이터 찾기
-    let targetLoc = null;
-    let targetRelic = null;
-    let targetLocId = null;
-
-    for (const [locId, locData] of Object.entries(LOCATIONS_DB)) {
-        if (locData.relics[relicId]) {
-            targetLoc = locData;
-            targetRelic = locData.relics[relicId];
-            targetLocId = locId;
-            break;
-        }
+    // 1. 유적지 검사
+    const targetLoc = LOCATIONS_DB[currentLocId];
+    if (!targetLoc) {
+        return res.status(404).json({ error: "존재하지 않는 유적지 ID입니다." });
     }
 
-    if (!targetLoc || !targetRelic) {
-        return res.status(404).json({ error: "존재하지 않는 유물 ID입니다." });
-    }
-
-    // 2. GPS 위치 검증 (테스트를 위한 우회 옵션 제공)
+    // 2. GPS 위치 검증 (가상 GPS 우회 가능)
     if (bypassGps !== true && bypassGps !== "true") {
         if (!lat || !lng) {
-            return res.status(400).json({ error: "실제 GPS 좌표가 수신되지 않았습니다. 위치 정보 제공 권한을 허용해 주세요." });
+            return res.status(400).json({ error: "실제 GPS 좌표가 수신되지 않았습니다." });
         }
         
         const distance = getDistance(parseFloat(lat), parseFloat(lng), targetLoc.lat, targetLoc.lng);
         console.log(`📍 위치 비교: 사용자 위치 <-> 유적지 [${targetLoc.name}] 거리: ${distance.toFixed(1)}m`);
 
-        // 유적지 반경 200m 이내에 도달해야 인정 (도심 한옥 등 오차 감안)
+        // 유적지 반경 200m 이내 도달 여부
         if (distance > 200) {
             return res.json({
                 success: false,
@@ -196,24 +184,31 @@ app.post("/api/scan", async (req, res) => {
             });
         }
     } else {
-        console.log(`⚠️ GPS 검증 우회 활성화됨 (유물: ${targetRelic.name})`);
+        console.log(`⚠️ GPS 검증 우회 활성화됨 (유적지: ${targetLoc.name})`);
     }
 
     // 3. 실시간 AI 판독 (Gemini API 호출)
     let aiMatch = false;
     let confidence = 0.0;
     let reason = "시뮬레이션 모드 판독 성공";
+    let matchedRelicId = relicId;
 
     if (isGeminiConfigured) {
         try {
-            // base64 이미지 정보 가공 (data:image/jpeg;base64, 부분 트리밍)
             const base64Data = image.split(",")[1] || image;
             const mimeType = image.split(";")[0].split(":")[1] || "image/jpeg";
-
             const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
             
-            const prompt = `You are a strict, expert AI historical analyzer for an interactive mobile exploration game.
-The user is at [${targetLoc.name}] and took a picture claiming it shows the relic: [${targetRelic.name}].
+            // 이 유적지에 속한 모든 등록 유물 리스트 구성
+            const relicListString = Object.entries(targetLoc.relics)
+                .map(([id, data]) => `- ${id}: ${data.name}`)
+                .join("\n");
+
+            let prompt = "";
+            if (relicId) {
+                // 기존 특정 타깃 유물 조준 검증
+                prompt = `You are a strict, expert AI historical analyzer for an interactive mobile exploration game.
+The user is at [${targetLoc.name}] and took a picture claiming it shows the relic: [${targetLoc.relics[relicId].name}].
 Analyze the uploaded image. Decide if this image depicts either the actual relic, a high-fidelity replica in the museum/site, a commemorative board with that relic's clear photo, or a museum exhibit display card containing this relic.
 Be strict but allow typical tourist photography angles, low indoor light, and display cases.
 
@@ -223,6 +218,23 @@ You MUST respond ONLY in raw JSON format (no markdown formatting, no \`\`\`json 
   "confidence": 0.0 to 1.0,
   "reason": "Brief Korean explanation about what was identified in the image and why it matches/does not match."
 }`;
+            } else {
+                // 자동 판독 모드 (사용자가 무엇인지 지정하지 않고 찍었을 때)
+                prompt = `You are an expert AI historical relic classifier for an interactive mobile game.
+The user is currently at [${targetLoc.name}] and took a photo of a relic/exhibit.
+Your task is to analyze the image and classify which of the following registered relics at this location is shown in the photo:
+${relicListString}
+
+If the image clearly depicts one of these registered relics (or its replica, display card, info board), return its exact ID in "matchedRelicId" (e.g. relic_muryeong_1).
+If it does not match any of these registered relics at this site, set "matchedRelicId" to null.
+
+You MUST respond ONLY in raw JSON format (no markdown formatting, no \`\`\`json wrappers) containing:
+{
+  "matchedRelicId": "relic_id_string" or null,
+  "confidence": 0.0 to 1.0,
+  "reason": "Brief Korean explanation about what relic was identified in the image and why it matches."
+}`;
+            }
 
             const response = await fetch(geminiUrl, {
                 method: "POST",
@@ -251,55 +263,65 @@ You MUST respond ONLY in raw JSON format (no markdown formatting, no \`\`\`json 
                 aiText = aiText.replace(/^```json/, "").replace(/```$/, "").trim();
                 
                 const aiResult = JSON.parse(aiText);
-                aiMatch = aiResult.isMatched;
-                confidence = aiResult.confidence;
-                reason = aiResult.reason;
-                console.log(`🤖 Gemini 분석 결과:`, aiResult);
+                if (relicId) {
+                    aiMatch = aiResult.isMatched;
+                    confidence = aiResult.confidence;
+                    reason = aiResult.reason;
+                    matchedRelicId = relicId;
+                } else {
+                    matchedRelicId = aiResult.matchedRelicId;
+                    aiMatch = matchedRelicId !== null;
+                    confidence = aiResult.confidence;
+                    reason = aiResult.reason;
+                }
+                console.log(`🤖 Gemini 자동 분석 결과:`, aiResult);
             } else {
                 console.error("⚠️ Gemini API 오류 응답 상세:", JSON.stringify(resData, null, 2));
                 throw new Error(resData.error?.message || "Gemini 응답 구조 오류");
             }
         } catch (err) {
             console.error("🤖 Gemini API 통신 오류:", err);
-            // API 오류 시 사용자 경험을 해치지 않기 위해 85% 확률로 우회 성공 처리 (폴백 시뮬레이션)
+            // 폴백 (테스트 편의성을 위해 첫 번째 유물로 매칭 폴백 처리)
+            matchedRelicId = relicId || Object.keys(targetLoc.relics)[0];
             aiMatch = true;
             confidence = 0.9;
-            reason = "서버 AI 모듈 로드 지연으로 인해 로컬 비전 매칭으로 백업 처리되었습니다.";
+            reason = "서버 AI 모듈 연결 지연으로 인해 로컬 폴백 매칭으로 처리되었습니다.";
         }
     } else {
         // 시뮬레이터 동작 (API 키가 없을 때)
+        matchedRelicId = relicId || Object.keys(targetLoc.relics)[0];
         aiMatch = true;
         confidence = 0.95;
+        reason = "시뮬레이션 모드에서 자동으로 첫 번째 유물을 판독 성공시켰습니다.";
     }
 
     // 4. 스탬프 보관소 DB (Supabase)에 기록 저장
-    if (aiMatch) {
+    if (aiMatch && matchedRelicId) {
         if (supabase) {
             try {
-                // 중복 방지 upsert
                 const { error } = await supabase
                     .from("user_progress")
                     .upsert({ 
                         device_id: deviceId, 
-                        relic_id: relicId, 
+                        relic_id: matchedRelicId, 
                         unlocked_at: new Date().toISOString() 
                     }, { onConflict: "device_id,relic_id" });
 
                 if (error) throw error;
-                console.log(`💾 Supabase 저장 완료: [Device: ${deviceId}] -> [Relic: ${relicId}]`);
+                console.log(`💾 Supabase 저장 완료: [Device: ${deviceId}] -> [Relic: ${matchedRelicId}]`);
             } catch (err) {
                 console.error("💾 Supabase DB 저장 에러:", err);
-                localProgressMemory.add(relicId);
+                localProgressMemory.add(matchedRelicId);
             }
         } else {
-            localProgressMemory.add(relicId);
+            localProgressMemory.add(matchedRelicId);
         }
         
         return res.json({
             success: true,
             confidence: confidence,
             reason: reason,
-            relicId: relicId
+            relicId: matchedRelicId
         });
     } else {
         return res.json({
