@@ -105,8 +105,18 @@ const LOCATIONS_DB = {
             "relic_hongpanseo_1": { name: "홍판서댁 사랑채" },
             "relic_hongpanseo_2": { name: "낮은 안채 굴뚝" }
         }
+    },
+    hansol: {
+        name: "세종 한솔동 백제고분군",
+        lat: 36.4786,
+        lng: 127.2575,
+        relics: {
+            "relic_hansol_1": { name: "한솔동 2호 석실분" },
+            "relic_hansol_2": { name: "한솔동 1호 석실분" }
+        }
     }
 };
+
 
 // 두 좌표 간 거리 계산 함수 (Haversine Formula)
 function getDistance(lat1, lon1, lat2, lon2) {

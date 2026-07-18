@@ -281,6 +281,49 @@ const LOCATIONS_DB = {
                 legend: "이 낮은 굴뚝 때문에 집 주변에는 아침저녁으로 밥을 지을 때마다 안개가 낀 것처럼 연기가 지면에 은은히 깔렸습니다. 백성들은 이를 두고 '홍판서댁의 따뜻한 배려가 땅에 머물며 마을 전체를 포근하게 데워준다'며 칭송했고, 도적이나 외부 적들도 이 집의 아름다운 덕망에 감화되어 감히 훔칠 생각조차 하지 않았다는 미담이 야사로 흘러내려 오고 있습니다."
             }
         ]
+    },
+    hansol: {
+        id: "hansol",
+        name: "⛰️ 세종 한솔동 백제고분군",
+        desc: "행정중심복합도시 건설 과정에서 발견된 5세기 백제 한성기의 굴식 돌방무덤(석실분) 지대로, 지하 궁전이라 불릴 만큼 뛰어난 축조 기술을 보여주는 세종시 최초의 국가 사적입니다.",
+        gps: { lat: 36.4786, lng: 127.2575 },
+        relics: [
+            {
+                id: "relic_hansol_1",
+                name: "한솔동 2호 석실분 (지하 궁전)",
+                hint: "역사공원 중앙에 보존관 유리창 너머로 보이는 거대한 돌방무덤의 입구와 내부 석축을 스캔하세요.",
+                svg: `<svg viewBox="0 0 100 100" width="120" height="120">
+                        <rect x="0" y="0" width="100" height="100" fill="none"/>
+                        <path d="M10,85 Q50,30 90,85 Z" fill="#1b4332" stroke="#0d1f14" stroke-width="2"/>
+                        <rect x="40" y="65" width="20" height="20" fill="#4b5563" stroke="#1f2937" stroke-width="1.5"/>
+                        <path d="M42,65 Q50,55 58,65 Z" fill="#374151" stroke="#1f2937" stroke-width="1.5"/>
+                        <path d="M45,85 L45,72 C45,72 50,68 55,72 L55,85 Z" fill="#000"/>
+                        <circle cx="28" cy="80" r="4" fill="#6b7280"/>
+                        <circle cx="72" cy="81" r="5" fill="#6b7280"/>
+                        <circle cx="76" cy="83" r="3" fill="#4b5563"/>
+                      </svg>`,
+                official: "한솔동 2호 석실분은 백제 한성시대 말기(5세기 초)에 만들어진 굴식 돌방무덤입니다. 당시 금강 유역 세종 지역을 관할하던 최고 귀족층의 무덤 구조로 평가받으며, 묘도출입석 등 정교한 백제 무덤 기법을 고스란히 가지고 있습니다.",
+                legend: "무덤 발굴 당시 지하로 향하는 문과 아치 모양의 거대한 돌방 구조가 마치 신전 같아 '지하 궁전'이라는 수식어가 붙었습니다. 야사에서는 백제가 고구려의 침략을 피해 웅진(공주)으로 천도하기 전, 세종 지역의 중요 거점에 왕실의 극비 자산과 병기들을 숨겨 두기 위해 위장 축조한 비밀 요새 중 하나였다는 전설이 깃들어 있습니다."
+            },
+            {
+                id: "relic_hansol_2",
+                name: "한솔동 1호 석실분",
+                hint: "보호각 내부에 노출되어 둥근 돌돌 쌓인 벽면을 보여주는 1호 석실분을 촬영하세요.",
+                svg: `<svg viewBox="0 0 100 100" width="120" height="120">
+                        <rect x="0" y="0" width="100" height="100" fill="none"/>
+                        <!-- Stacked stone circle structure -->
+                        <ellipse cx="55" cy="68" rx="32" ry="18" fill="none" stroke="#78716c" stroke-width="4"/>
+                        <ellipse cx="55" cy="68" rx="27" ry="14" fill="none" stroke="#4b5563" stroke-width="2" stroke-dasharray="4, 2"/>
+                        <!-- Entrance with lintel stone -->
+                        <rect x="26" y="48" width="14" height="22" fill="#374151" stroke="#1f2937" stroke-width="1.5"/>
+                        <line x1="22" y1="48" x2="42" y2="48" stroke="#1f2937" stroke-width="3" stroke-linecap="round"/>
+                        <!-- Wood deck surrounding structure -->
+                        <path d="M5,88 L95,88 L90,95 L10,95 Z" fill="#78350f" opacity="0.8"/>
+                      </svg>`,
+                official: "한솔동 1호 석실분은 세종 역사공원 내부에 보호각을 씌워 노출 보존하고 있는 백제 시대 돌방무덤입니다. 둥글고 납작한 천연 돌을 벽돌처럼 겹겹이 정교하게 쌓아 올려 내부 공간을 조성한 형태를 보여줍니다.",
+                legend: "이 석실분은 하늘과 소통하기 쉽도록 위쪽이 열린 원형 제단 형태로 설계되었다는 야사가 있습니다. 주변 주민들 사이에서는 달이 유독 밝은 밤 1호 석실분 주변을 돌며 마음속 소원을 빌면 하늘이 그 뜻을 굽어살펴 소원이 이루어진다는 평화롭고 친근한 이야기가 민간에 전해집니다."
+            }
+        ]
     }
 };
 
