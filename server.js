@@ -129,8 +129,8 @@ const LOCATIONS_DB = {
     },
     hansol: {
         name: "세종 한솔동 백제고분군",
-        lat: 36.4786,
-        lng: 127.2575,
+        lat: 36.4765,
+        lng: 127.2479,
         relics: {
             "relic_hansol_1": { name: "한솔동 2호 석실분" },
             "relic_hansol_2": { name: "한솔동 1호 석실분" }
