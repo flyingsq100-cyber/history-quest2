@@ -496,19 +496,41 @@ async function loadGoogleMapsSdk() {
         const config = await response.json();
         const apiKey = config.mapsApiKey || "";
         
+        if (!apiKey || apiKey.trim() === "") {
+            console.warn("⚠️ Google Maps API Key가 제공되지 않았습니다. 플레이스홀더를 노출합니다.");
+            renderMapPlaceholder();
+            return;
+        }
+        
         const script = document.createElement("script");
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initGoogleMap`;
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initGoogleMap&loading=async`;
         script.async = true;
         script.defer = true;
         
         script.onerror = () => {
-            console.error("구글 지도 로딩 실패: 네트워크 또는 API Key가 제공되지 않았습니다.");
-            document.getElementById("map").innerHTML = `<div style="color:var(--gold-color); padding:40px 20px; text-align:center; font-size:0.9rem;">🗺️ 구글 지도 API가 비활성화되어 있습니다.<br><span style="font-size:0.75rem; color:#888;">(.env 파일에 GOOGLE_MAPS_API_KEY를 등록해 주세요.)</span></div>`;
+            renderMapPlaceholder();
         };
         
         document.head.appendChild(script);
     } catch (err) {
         console.error("지도 설정 로딩 장애:", err);
+        renderMapPlaceholder();
+    }
+}
+
+function renderMapPlaceholder() {
+    const mapElement = document.getElementById("map");
+    if (mapElement) {
+        mapElement.innerHTML = `
+            <div style="width:100%; height:100%; background:#1a1a1a; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px; box-sizing:border-box; color:var(--gold-color); font-family:'Noto Sans KR',sans-serif; text-align:center;">
+                <div style="font-size:2rem; margin-bottom:8px;">🗺️</div>
+                <div style="font-weight:700; font-size:0.85rem; margin-bottom:6px;">구글 지도 API 키 설정 필요</div>
+                <div style="font-size:0.7rem; color:#888; line-height:1.4; max-width:240px;">
+                    개발 단계에서는 가상 시뮬레이터로 탐험 가능합니다.<br>
+                    지도를 활성화하려면 <b>.env</b> 파일에 <b>GOOGLE_MAPS_API_KEY</b>를 입력하세요.
+                </div>
+            </div>
+        `;
     }
 }
 
@@ -535,6 +557,7 @@ window.initGoogleMap = function() {
         zoom: 10.5,
         center: centerLatLng,
         styles: darkStyle,
+        mapId: "DEMO_MAP_ID", // AdvancedMarkerElement 호환용 데모 ID
         mapTypeControl: false,
         streetViewControl: false,
         fullscreenControl: false
@@ -545,35 +568,25 @@ window.initGoogleMap = function() {
     updateMapMarkers();
 };
 
-function drawLocationMarkersOnMap() {
+async function drawLocationMarkersOnMap() {
     if (!googleMapObj) return;
 
     // 기존 마커가 있다면 모두 제거
     Object.values(locationMarkers).forEach(m => m.setMap(null));
     locationMarkers = {};
 
+    let AdvancedMarkerElement = null;
+    let PinElement = null;
+    try {
+        const markerLib = await google.maps.importLibrary("marker");
+        AdvancedMarkerElement = markerLib.AdvancedMarkerElement;
+        PinElement = markerLib.PinElement;
+    } catch (e) {
+        console.warn("AdvancedMarkerElement 로드 실패. 기존 Marker로 폴백합니다.");
+    }
+
     Object.entries(LOCATIONS_DB).forEach(([locId, locData]) => {
         const markerColor = APP_STATE.currentLocId === locId ? "#d4af37" : "#78716c"; // 골드 또는 그레이
-        
-        // 커스텀 SVG 마커 핀
-        const markerPin = {
-            path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-12-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z",
-            fillColor: markerColor,
-            fillOpacity: 1,
-            strokeColor: "#000",
-            strokeWeight: 1.5,
-            scale: 1.2,
-            anchor: new google.maps.Point(12, 22)
-        };
-
-        const marker = new google.maps.Marker({
-            position: { lat: locData.gps.lat, lng: locData.gps.lng },
-            map: googleMapObj,
-            title: locData.name,
-            icon: markerPin
-        });
-
-        // 인포윈도우 추가
         const total = locData.relics.length;
         const unlocked = total === 0 ? (APP_STATE.unlockedRelics.includes(locId) ? 1 : 0) : locData.relics.filter(r => APP_STATE.unlockedRelics.includes(r.id)).length;
         const statusText = total === 0 ? (unlocked === 1 ? "방문 완료" : "미방문") : `${unlocked}/${total} 발견`;
@@ -584,6 +597,43 @@ function drawLocationMarkersOnMap() {
                         <p style="margin:0; font-size:0.75rem; color:#555;">탐험 상태: <b>${statusText}</b></p>
                       </div>`
         });
+
+        let marker;
+        const position = { lat: locData.gps.lat, lng: locData.gps.lng };
+
+        if (AdvancedMarkerElement && PinElement) {
+            const pinElement = new PinElement({
+                background: markerColor,
+                borderColor: "#111111",
+                glyphColor: "#ffffff",
+                scale: 0.95
+            });
+
+            marker = new AdvancedMarkerElement({
+                position: position,
+                map: googleMapObj,
+                title: locData.name,
+                content: pinElement.element
+            });
+        } else {
+            // 커스텀 SVG 마커 핀 (폴백)
+            const markerPin = {
+                path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-12-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z",
+                fillColor: markerColor,
+                fillOpacity: 1,
+                strokeColor: "#000",
+                strokeWeight: 1.5,
+                scale: 1.2,
+                anchor: new google.maps.Point(12, 22)
+            };
+
+            marker = new google.maps.Marker({
+                position: position,
+                map: googleMapObj,
+                title: locData.name,
+                icon: markerPin
+            });
+        }
 
         marker.addListener("click", () => {
             // 마커 클릭 시 가상 GPS 시뮬레이션 작동
@@ -601,7 +651,7 @@ function drawLocationMarkersOnMap() {
     });
 }
 
-function updateMapMarkers() {
+async function updateMapMarkers() {
     if (!googleMapObj) return;
 
     // 사용자 위치 표시 (실제 또는 가상)
@@ -617,8 +667,34 @@ function updateMapMarkers() {
     if (currentLat && currentLng) {
         const userLatLng = { lat: currentLat, lng: currentLng };
 
-        if (!userLocationMarker) {
+        let AdvancedMarkerElement = null;
+        let PinElement = null;
+        try {
+            const markerLib = await google.maps.importLibrary("marker");
+            AdvancedMarkerElement = markerLib.AdvancedMarkerElement;
+            PinElement = markerLib.PinElement;
+        } catch (e) {}
+
+        if (userLocationMarker) {
+            userLocationMarker.setMap(null);
+        }
+
+        if (AdvancedMarkerElement && PinElement) {
             // 사용자 위치 파란색 레이더 형태 마커 생성
+            const pinElement = new PinElement({
+                background: "#3b82f6",
+                borderColor: "#ffffff",
+                glyphColor: "#ffffff",
+                scale: 0.8
+            });
+
+            userLocationMarker = new AdvancedMarkerElement({
+                position: userLatLng,
+                map: googleMapObj,
+                title: "현재 위치",
+                content: pinElement.element
+            });
+        } else {
             userLocationMarker = new google.maps.Marker({
                 position: userLatLng,
                 map: googleMapObj,
@@ -632,8 +708,6 @@ function updateMapMarkers() {
                     strokeWeight: 1.5
                 }
             });
-        } else {
-            userLocationMarker.setPosition(userLatLng);
         }
 
         // 마커 클릭 상태 갱신을 위해 마커 색상 리로드
