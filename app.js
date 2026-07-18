@@ -657,6 +657,7 @@ async function startHardwareCamera() {
         APP_STATE.cameraStreamObj = stream;
         video.srcObject = stream;
         console.log("🟢 카메라 하드웨어 스트림 연결 성공");
+        updateShutterButtonState();
     } catch (err) {
         console.error("카메라 연결 실패:", err);
         alert("카메라 스트림을 시작하지 못했습니다. 브라우저 카메라 권한을 확인하시거나 '앨범 사진 업로드' 기능을 이용해 주세요.");
